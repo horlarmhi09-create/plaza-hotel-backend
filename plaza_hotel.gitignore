@@ -3,10 +3,36 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.swp
+*.egg-info/
+*.egg
+.eggs/
+
+# Virtual environment
+venv/
+
+# Django stuff
+*.sqlite3
+*.log
+*.pot
+*.py[cod]
+
+# Environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
 # Virtual environment
 venv/
 env/
+pip/
 
 # Django
 db.sqlite3
@@ -15,7 +41,3 @@ staticfiles/
 
 # Environment variables
 .env
-
-# OS
-.DS_Store
-Thumbs.db

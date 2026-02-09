@@ -41,13 +41,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-i07peomw-!p$q3-p$j*v$vo0l1n%2o+g$+qcjqlepje&wv)hi9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = [
-        'plaza-hotel-backend-zv2l.onrender.com',
-        'localhost', 
-        '127.0.0.1'
-    ]
+ALLOWED_HOSTS = ['*']
 
 PAYSTACK_SECRET_KEY = "sk_test_67d4eb5731f2d0b6bd9d44378c100af691daecb6"
 

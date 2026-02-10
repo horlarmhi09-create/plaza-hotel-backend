@@ -43,16 +43,17 @@ class Booking(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
-   def save(self, *args, **kwargs):
-    if self.check_in and self.check_out:
-        self.nights = (self.check_out - self.check_in).days
+    def save(self, *args, **kwargs):
+        if self.check_in and self.check_out:
+            self.nights = (self.check_out - self.check_in).days
 
-        if self.nights <= 0:
-            raise ValueError("Check-out date must be after check-in date")
+            if self.nights <= 0:
+                raise ValueError("Check-out date must be after check-in date")
 
-        self.total_price = self.room.price_per_night * self.nights
+            self.total_price = self.room.price_per_night * self.nights
 
-    super().save(*args, **kwargs)
+            super().save(*args, **kwargs)
+
 
 
 

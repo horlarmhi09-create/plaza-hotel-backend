@@ -14,9 +14,3 @@ def is_room_available(room, check_in, check_out):
 # Example function that uses the service
 def can_book_room(room_id, check_in, check_out):
     return is_room_available(room_id, check_in, check_out)
-
-
-router = DefaultRouter()
-router.register('', BookingViewSet, basename='bookings')
-
-urlpatterns = router.urls

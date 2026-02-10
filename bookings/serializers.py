@@ -57,7 +57,7 @@ class BookingSerializer(serializers.ModelSerializer):
             'nights',
             'total_price',
         ]
-        read_only_fields = ['total_price']
+        read_only_fields = ['nights','total_price']
 
     def validate(self, data):
         if data['check_out'] <= data['check_in']:
@@ -65,3 +65,4 @@ class BookingSerializer(serializers.ModelSerializer):
                 "Check-out date must be after check-in date"
             )
         return data
+

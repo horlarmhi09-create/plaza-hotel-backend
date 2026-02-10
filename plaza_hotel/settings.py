@@ -16,7 +16,7 @@ from decouple import config
 import os
 import dj_database_url
 
-PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
+PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY', default='')
 #PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
 
 REST_FRAMEWORK = {

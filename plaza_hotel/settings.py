@@ -121,9 +121,9 @@ if os.environ.get("DATABASE_URL"):
         ssl_require=True
     )
     
-SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY = config("SECRET_KEY", default='django-insecure-tempkey-for-dev-only')
 DEBUG = config("DEBUG", default=True, cast=bool)
-PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
+PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY', default='')
 
 
 

@@ -110,7 +110,14 @@ WSGI_APPLICATION = 'plaza_hotel.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get("postgresql://plaza_db_17cc_user:E76Z9qRNotIfhfpIWdlNXL6vfLwNvo0W@dpg-d6540f63jp1c73edb2k0-a.frankfurt-postgres.render.com/plaza_db_17cc"))
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'plaza_db_17cc',                 # your Render DB name
+        'USER': 'plaza_db_17cc_user',               # your DB username
+        'PASSWORD': 'E76Z9qRNotIfhfpIWdlNXL6vfLwNvo0W',            # your DB password
+        'HOST': 'dpg-d6540f63jp1c73edb2k0-a',     # your DB host
+        'PORT': '5432',                  # usually 5432
+    }
 }
 
 

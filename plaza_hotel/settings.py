@@ -110,17 +110,10 @@ WSGI_APPLICATION = 'plaza_hotel.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    'default': dj_database_url.config(default=os.environ.get("postgresql://plaza_db_17cc_user:E76Z9qRNotIfhfpIWdlNXL6vfLwNvo0W@dpg-d6540f63jp1c73edb2k0-a.frankfurt-postgres.render.com/plaza_db_17cc"))
 }
 
-if os.environ.get("DATABASE_URL"):
-    DATABASES["default"] = dj_database_url.config(
-        conn_max_age=600,
-        ssl_require=True
-    )
+
     
 SECRET_KEY = config("SECRET_KEY", default='django-insecure-tempkey-for-dev-only')
 DEBUG = config("DEBUG", default=True, cast=bool)

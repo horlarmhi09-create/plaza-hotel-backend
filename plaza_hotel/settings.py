@@ -71,7 +71,8 @@ INSTALLED_APPS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://plaza-de-aruna-hotel.vercel.app"
+    "https://plaza-de-aruna-hotel.vercel.app",
+    "http://localhost:5173",
 ]
 
 MIDDLEWARE = [

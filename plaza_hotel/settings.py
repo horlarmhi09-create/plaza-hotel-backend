@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'bookings',
     'dashboard',
     'payments',
+    'user_messages.apps.UserMessagesConfig',
 ]
 
 CORS_ALLOWED_ORIGINS = [

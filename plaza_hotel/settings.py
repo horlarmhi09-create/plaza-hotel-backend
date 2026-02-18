@@ -110,15 +110,17 @@ WSGI_APPLICATION = 'plaza_hotel.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'plaza_db_17cc',                 # your Render DB name
-        'USER': 'plaza_db_17cc_user',               # your DB username
-        'PASSWORD': 'E76Z9qRNotIfhfpIWdlNXL6vfLwNvo0W',            # your DB password
-        'HOST': 'dpg-d6540f63jp1c73edb2k0-a',     # your DB host
-        'PORT': '5432',                  # usually 5432
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+if os.environ.get("DATABASE_URL"):
+    DATABASES["default"] = dj_database_url.config(
+        conn_max_age=600,
+        ssl_require=True
+    )
 
 
     

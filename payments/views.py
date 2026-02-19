@@ -194,10 +194,16 @@ class VerifyPaymentView(APIView):
             }
         )
 
+        if success:
+            booking.room.status = "booked"
+            booking.room.save()
+            booking.save()
+
         return Response({
             "success": success,
             "payment_id": payment.id,
-            "status": payment.status
+            "status": payment.status,
+            "room_status": booking.room.status if success else None
         })
 
 class PaymentListView(APIView):

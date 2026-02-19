@@ -5,6 +5,12 @@ from rooms.models import Room
 from datetime import date
 
 class Booking(models.Model):
+    ROOM_STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('cancelled', 'Cancelled'),
+    ]
+
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
 
     guest_name = models.CharField(max_length=100)
@@ -16,6 +22,11 @@ class Booking(models.Model):
 
     nights = models.PositiveIntegerField(null=True, blank=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    status = models.CharField(
+        max_length=10,
+        choices=ROOM_STATUS_CHOICES,
+        default='pending'
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
 

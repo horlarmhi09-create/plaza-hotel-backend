@@ -20,6 +20,7 @@ class Room(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, default=10000)
     image = models.ImageField(upload_to='rooms/', null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='available')
+    price_per_night = models.DecimalField(max_digits=10, decimal_places=2)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

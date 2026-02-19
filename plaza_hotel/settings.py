@@ -17,7 +17,7 @@ import os
 import dj_database_url
 
 PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY', default='')
-#PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
+PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY', default='')
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -46,8 +46,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-PAYSTACK_SECRET_KEY = "sk_test_67d4eb5731f2d0b6bd9d44378c100af691daecb6"
-
+PAYSTACK_SECRET_KEY = "sk_test_dc72e4ed648951b7988cf5bc13b9bebf83d6cd96"
+PAYSTACK_PUBLIC_KEY = "pk_test_39632c328e67d3bc6ec8ffd2b98426b142f066c9"
 
 # Application definition
 
@@ -114,22 +114,20 @@ WSGI_APPLICATION = 'plaza_hotel.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": 'plaza_db',
+	'USER': 'plaza_user',
+        'PASSWORD': 'giwa,.00jamiu',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
-
-if os.environ.get("DATABASE_URL"):
-    DATABASES["default"] = dj_database_url.config(
-        conn_max_age=600,
-        ssl_require=True
-    )
 
 
     
 SECRET_KEY = config("SECRET_KEY", default='django-insecure-tempkey-for-dev-only')
 DEBUG = config("DEBUG", default=True, cast=bool)
 PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY', default='')
-
+PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY', default='')
 
 
 # Password validation

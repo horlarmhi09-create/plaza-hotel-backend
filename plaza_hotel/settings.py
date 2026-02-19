@@ -44,7 +44,9 @@ SECRET_KEY = 'django-insecure-i07peomw-!p$q3-p$j*v$vo0l1n%2o+g$+qcjqlepje&wv)hi9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    "81.17.103.145",
+]
 
 PAYSTACK_SECRET_KEY = "sk_test_dc72e4ed648951b7988cf5bc13b9bebf83d6cd96"
 PAYSTACK_PUBLIC_KEY = "pk_test_39632c328e67d3bc6ec8ffd2b98426b142f066c9"

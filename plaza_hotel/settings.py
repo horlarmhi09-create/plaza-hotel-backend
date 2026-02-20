@@ -117,10 +117,10 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": 'plaza_db',
-	'USER': 'plaza_user',
-        'PASSWORD': 'giwa,.00jamiu',
-        'HOST': 'localhost',
-        'PORT': '5432',
+	    "USER": 'plaza_user',
+        "PASSWORD": 'giwa,.00jamiu',
+        "HOST": 'localhost',
+        "PORT": '5432',
     }
 }
 

@@ -122,24 +122,42 @@ def initialize_payment(request):
     return Response({
         "payment_url": payment_url
     })"""
-    
-    
+
 # payments/views.py
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
-from .models import Booking
+from django.shortcuts import get_object_or_404, redirect
 from .models import Payment
 from .serializers import PaymentSerializer
 from .paystack import initialize_payment, verify_payment
 from decimal import Decimal
 from bookings.models import Booking
 from rest_framework.permissions import IsAdminUser
+from drf_spectacular.utils import extend_schema
+from .serializers import (
+    PaymentSerializer,
+    InitializePaymentRequestSerializer,
+    VerifyPaymentRequestSerializer
+)
+import uuid
+import hmac
+import hashlib
+import json
+from django.http import HttpResponse
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import send_mail
+
 
 class InitializePaymentView(APIView):
     permission_classes = [AllowAny]
 
+    @extend_schema(
+        request=InitializePaymentRequestSerializer,
+        responses={200: None},
+        auth=[]
+    )
     def post(self, request):
         booking_id = request.data.get('booking_id')
         email = request.data.get('email')
@@ -149,26 +167,48 @@ class InitializePaymentView(APIView):
 
         booking = get_object_or_404(Booking, id=booking_id)
 
-        # Convert to smallest unit
-        #booking.total_price = 5000.00
         amount_in_kobo = int(booking.total_price * 100)
+
+        booking.status = 'pending'
+        booking.save()
+
+        booking.room.status = 'pending'
+        booking.room.save()
+
+        print("TOTAL PRICE:", booking.total_price)
+        print("AMOUNT IN KOBO:", amount_in_kobo)
 
         if amount_in_kobo <= 0:
             return Response({"error": "Amount must be greater than zero"}, status=400)
 
+        # ✅ Generate unique reference
+        reference = f"BOOK-{booking.id}-{uuid.uuid4().hex[:8]}"
+    
+        booking.reference = reference
+        booking.save()
+
         payment_url = initialize_payment(
             email=email,
             amount=amount_in_kobo,
-            reference=str(booking.id)
+            reference=reference,
+            callback_url="https://api.blissfulplace.com.ng/paymentCallback/"
         )
 
-        return Response({"payment_url": payment_url})
+        return Response({
+            "authorization_url": payment_url,
+            "reference": reference
+        })
 
 
 
 class VerifyPaymentView(APIView):
     permission_classes = [AllowAny]
 
+    @extend_schema(
+        request=VerifyPaymentRequestSerializer,
+        responses={200: None},
+        auth=[]
+    )
     def post(self, request):
         reference = request.data.get('reference')
         booking_id = request.data.get('booking_id')  # You need to know which booking
@@ -195,9 +235,14 @@ class VerifyPaymentView(APIView):
         )
 
         if success:
+            booking.status = "confirmed"
             booking.room.status = "booked"
-            booking.room.save()
-            booking.save()
+        else:
+            booking.status = "cancelled"
+            booking.room.status = "available"
+
+        booking.save()
+        booking.room.save()
 
         return Response({
             "success": success,
@@ -208,8 +253,72 @@ class VerifyPaymentView(APIView):
 
 class PaymentListView(APIView):
     permission_classes = [IsAdminUser]  # Only admin/dashboard can see
-
+    @extend_schema(
+        request=VerifyPaymentRequestSerializer,
+        responses={200: None},
+        auth=[]
+    )
     def get(self, request):
         payments = Payment.objects.all().order_by('-created_at')
         serializer = PaymentSerializer(payments, many=True)
         return Response(serializer.data)
+
+def payment_callback(request):
+    reference = request.GET.get("reference")
+
+    # Redirect to frontend page
+    return redirect(f"https://blissfulplace.ng/payment-success?reference={reference}")
+
+"""@csrf_exempt
+def paystack_webhook(request):
+    payload = request.body
+    signature = request.headers.get("x-paystack-signature")
+
+    computed_signature = hmac.new(
+        settings.PAYSTACK_SECRET_KEY.encode(),
+        payload,
+        hashlib.sha512
+    ).hexdigest()
+
+    if computed_signature != signature:
+        return HttpResponse(status=400)
+
+    event = json.loads(payload)
+
+    if event["event"] == "charge.success":
+        data = event["data"]
+        reference = data["reference"]
+        amount = data["amount"] / 100
+        email = data["customer"]["email"]
+
+        if Payment.objects.filter(reference=reference).exists():
+            return HttpResponse(status=200)
+
+        # Find the booking using payment_reference
+        booking = Booking.objects.get(reference=reference)
+
+        Payment.objects.create(
+            booking=booking,
+            reference=reference,
+            amount=amount,
+            email=email,
+            status="success",
+            paid_at=data["paid_at"]
+        )
+        booking.status = "confirmed"
+        booking.payment_status = "paid"
+        booking.save()
+
+        # ✅ Update the room
+        room = booking.room
+        room.status = "booked"
+        room.save()
+
+        send_mail(
+            "Booking Confirmed",
+            f"Your booking at Blissful Place has been confirmed.",
+            settings.DEFAULT_FROM_EMAIL,
+            [email],
+        )
+
+    return HttpResponse(status=200)"""

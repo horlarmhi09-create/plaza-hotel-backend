@@ -6,9 +6,19 @@ from rest_framework_simplejwt.views import (
 )
 from django.conf.urls.static import static
 from django.conf import settings
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from django.http import HttpResponse
+from payments.views import payment_callback
+
+
+def home(request):
+    return HttpResponse("Blissful Place Backend is Running")
 
 
 urlpatterns = [
+    path("", home),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('dashboard/', include('dashboard.urls')),
@@ -20,6 +30,7 @@ urlpatterns = [
     path('api/payments/', include('payments.urls')),
     path('api/newsletter/', include('newsletter.urls')),
     path('api/', include('user_messages.urls')),
+    path("paymentCallback/", payment_callback),
 ]
 
 if settings.DEBUG:

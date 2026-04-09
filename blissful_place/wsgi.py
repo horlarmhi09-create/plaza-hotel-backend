@@ -1,5 +1,5 @@
 """
-WSGI config for plaza_hotel project.
+WSGI config for blissful_place project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'plaza_hotel.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'blissful_place.settings')
 
 application = get_wsgi_application()

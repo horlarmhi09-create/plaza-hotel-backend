@@ -4,7 +4,18 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import BookingSerializer
-from rooms.models import Room  # make sure this is correct
+from rooms.models import Room
+from drf_spectacular.utils import extend_schema
+
+
+@extend_schema(
+    request=BookingSerializer,
+    responses={
+        201: BookingSerializer,
+        400: None,
+    },
+    description="Create a public booking for a room"
+)
 
 @api_view(['POST'])
 @permission_classes([AllowAny])

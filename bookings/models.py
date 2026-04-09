@@ -39,16 +39,16 @@ class Booking(models.Model):
 
             self.total_price = self.room.price_per_night * self.nights
 
-            super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
             # ROOM STATUS CONTROL
-        if self.status == 'pending':
+        """if self.status == 'pending':
             self.room.status = 'pending'
         elif self.status == 'confirmed':
             self.room.status = 'booked'
         elif self.status == 'cancelled':
             self.room.status = 'available'
 
-        self.room.save()
+        self.room.save()"""
 

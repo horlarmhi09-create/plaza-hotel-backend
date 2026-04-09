@@ -1,1 +1,1 @@
- web: gunicorn plaza_hotel.wsgi 
+ web: gunicorn blissful_place.wsgi 

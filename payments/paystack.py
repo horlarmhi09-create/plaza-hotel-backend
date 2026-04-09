@@ -6,7 +6,7 @@ PAYSTACK_SECRET_KEY = "sk_test_dc72e4ed648951b7988cf5bc13b9bebf83d6cd96"
 
 BASE_URL = "https://api.paystack.co"
 
-def initialize_payment(email: str, amount: int, reference: str) -> str:
+def initialize_payment(email: str, amount: int, reference: str, callback_url) -> str:
     """
     Initialize a Paystack payment.
     amount should be in kobo (1 NGN = 100 kobo)
@@ -21,6 +21,7 @@ def initialize_payment(email: str, amount: int, reference: str) -> str:
         "email": email,
         "amount": amount,
         "reference": reference,
+        "callback_url": callback_url,
     }
 
     try:
